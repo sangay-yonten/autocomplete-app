@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
+import { AppProvider } from './providers/AppProvider';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider>
+      <div className="app">
+        <header className="app-header">
+          <h1>Autocomplete App</h1>
+          <p>React + TypeScript + Recoil</p>
+        </header>
+        <main className="app-main">
+          {/* Autocomplete component will go here in step 4 */}
+          <p>Autocomplete component coming soon...</p>
+
+          {/* Selected items list will go here in step 6 */}
+          <p>Selected items list coming soon...</p>
+        </main>
+      </div>
+    </AppProvider>
   );
 }
 
