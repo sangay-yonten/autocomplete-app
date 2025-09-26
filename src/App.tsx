@@ -1,5 +1,7 @@
 import React from 'react';
 import { AppProvider } from './providers/AppProvider';
+import Autocomplete from './components/Autocomplete';
+import SelectedList from './components/SelectedList';
 import './App.css';
 
 function App() {
@@ -11,11 +13,8 @@ function App() {
           <p>React + TypeScript + Recoil</p>
         </header>
         <main className="app-main">
-          {/* Autocomplete component will go here in step 4 */}
-          <p>Autocomplete component coming soon...</p>
-
-          {/* Selected items list will go here in step 6 */}
-          <p>Selected items list coming soon...</p>
+          <Autocomplete />
+          <SelectedList />
         </main>
       </div>
     </AppProvider>
