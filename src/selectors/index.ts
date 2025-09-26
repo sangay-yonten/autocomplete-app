@@ -10,15 +10,15 @@ export const filteredOptionsSelector = selector<Item[]>({
     const searchInput = get(searchInputState);
     const options = get(autocompleteOptionsState);
     const selectedItems = get(selectedItemsState);
-    
+
     if (!searchInput.trim()) {
       return [];
     }
-    
+
     // Filter options based on search input and exclude already selected items
     const selectedIds = new Set(selectedItems.map(item => item.id));
-    
-    return options.filter(option => 
+
+    return options.filter(option =>
       !selectedIds.has(option.id) &&
       option.title.toLowerCase().includes(searchInput.toLowerCase())
     );
