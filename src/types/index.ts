@@ -4,6 +4,7 @@ export interface Item {
   id: number;
   title: string;
   completed?: boolean;
+  email?: string;
 }
 
 export interface AutocompleteOption {

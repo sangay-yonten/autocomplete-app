@@ -1,10 +1,10 @@
 // Autocomplete input component
 import React, { useEffect, useCallback } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { searchInputState, isDropdownOpenState, isLoadingState, autocompleteOptionsState } from '../../atoms';
+import { searchInputState, isDropdownOpenState, isLoadingState, autocompleteOptionsState, selectedItemsState } from '../../atoms';
 import { filteredOptionsSelector } from '../../selectors';
 import { fetchUsers } from '../../services/api';
-import { Item } from '../../types';
+import { Item, SelectedItem } from '../../types';
 import './Autocomplete.css';
 
 const Autocomplete: React.FC = () => {
@@ -12,6 +12,7 @@ const Autocomplete: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useRecoilState(isDropdownOpenState);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   const setAutocompleteOptions = useSetRecoilState(autocompleteOptionsState);
+  const setSelectedItems = useSetRecoilState(selectedItemsState);
   const filteredOptions = useRecoilValue(filteredOptionsSelector);
 
   // Fetch initial data on component mount
@@ -38,10 +39,19 @@ const Autocomplete: React.FC = () => {
   }, [setSearchInput, setIsDropdownOpen]);
 
   const handleOptionClick = useCallback((option: Item) => {
-    // This will be handled by the provider
-    console.log('Selected option:', option);
+    // Create selected item with timestamp
+    const newSelectedItem: SelectedItem = {
+      ...option,
+      selectedAt: new Date(),
+    };
+
+    // Add to selected items
+    setSelectedItems(prev => [...prev, newSelectedItem]);
+
+    // Clear search and close dropdown
+    setSearchInput('');
     setIsDropdownOpen(false);
-  }, [setIsDropdownOpen]);
+  }, [setSelectedItems, setSearchInput, setIsDropdownOpen]);
 
   const handleInputFocus = useCallback(() => {
     if (searchInput.trim()) {
@@ -59,7 +69,7 @@ const Autocomplete: React.FC = () => {
       <input
         type="text"
         className="autocomplete-input"
-        placeholder={isLoading ? "Loading..." : "Search for items..."}
+        placeholder={isLoading ? "Loading..." : "Search for users..."}
         value={searchInput}
         onChange={handleInputChange}
         onFocus={handleInputFocus}
@@ -76,12 +86,12 @@ const Autocomplete: React.FC = () => {
                 className="autocomplete-option"
                 onClick={() => handleOptionClick(option)}
               >
-                {option.title}
+                {option.title} {option.email}
               </div>
             ))
           ) : searchInput.trim() ? (
             <div className="autocomplete-option no-results">
-              No results found
+              No users found
             </div>
           ) : null}
         </div>

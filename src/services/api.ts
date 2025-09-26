@@ -52,6 +52,7 @@ export const fetchUsers = async (): Promise<Item[]> => {
       id: user.id,
       title: user.name,
       completed: false,
+      email: user.email,
     }));
   } catch (error) {
     console.error('Error fetching users:', error);

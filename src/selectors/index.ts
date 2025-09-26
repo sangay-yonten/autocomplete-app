@@ -20,7 +20,7 @@ export const filteredOptionsSelector = selector<Item[]>({
 
     return options.filter(option =>
       !selectedIds.has(option.id) &&
-      option.title.toLowerCase().includes(searchInput.toLowerCase())
+      (option.title.toLowerCase().includes(searchInput.toLowerCase()) || option.email?.toLowerCase().includes(searchInput.toLowerCase()))
     );
   },
 });
