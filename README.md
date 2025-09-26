@@ -28,7 +28,7 @@ A React TypeScript application featuring an autocomplete input component with st
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:sangay-yonten/autocomplete-app.git
 cd autocomplete-app
 ```
 
