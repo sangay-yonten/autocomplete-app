@@ -1,14 +1,13 @@
 // Selected items list component
 import React from 'react';
-import { useRecoilState } from 'recoil';
-import { selectedItemsState } from '../../atoms';
+import { useAutocompleteContext } from '../../providers/AppProvider';
 import './SelectedList.css';
 
 const SelectedList: React.FC = () => {
-  const [selectedItems, setSelectedItems] = useRecoilState(selectedItemsState);
+  const { selectedItems, handleRemoveItem } = useAutocompleteContext();
 
   const handleDeleteItem = (itemId: number) => {
-    setSelectedItems(prev => prev.filter(item => item.id !== itemId));
+    handleRemoveItem(itemId);
   };
 
   return (
@@ -22,7 +21,6 @@ const SelectedList: React.FC = () => {
           {selectedItems.map((item) => (
             <li key={item.id} className="selected-item">
               <span className="item-title">{item.title}</span>
-              <span className="item-selected-at">Selected at: {item.email}</span>
 
               <div className="item-actions">
                 <button
