@@ -24,6 +24,7 @@ export interface AutocompleteContextType {
   handleSearchChange: (value: string) => void;
   handleSelectItem: (item: Item) => void;
   handleRemoveItem: (itemId: number) => void;
+  handleReEditItem: (item: SelectedItem) => void;
   handleInputFocus: () => void;
   handleInputBlur: () => void;
 }

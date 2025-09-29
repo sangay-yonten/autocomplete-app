@@ -103,6 +103,13 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setTimeout(() => setIsDropdownOpen(false), 150);
   }, [setIsDropdownOpen]);
 
+  // Handle re-editing a selected item by moving it back to input
+  const handleReEditItem = useCallback((item: SelectedItem) => {
+    handleRemoveItem(item.id);
+    handleSearchChange(item.title);
+    setTimeout(() => handleInputFocus(), 0); // Delay to allow state update
+  }, [handleRemoveItem, handleSearchChange, handleInputFocus]);
+
   const contextValue: AutocompleteContextType = {
     // State
     searchInput,
@@ -116,6 +123,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     handleSearchChange,
     handleSelectItem,
     handleRemoveItem,
+    handleReEditItem,
     handleInputFocus,
     handleInputBlur,
   };
