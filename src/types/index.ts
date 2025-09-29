@@ -18,6 +18,7 @@ export interface AutocompleteContextType {
   isLoading: boolean;
   isDropdownOpen: boolean;
   filteredOptions: Item[];
+  errorMessage: string | null;
 
   // Actions
   handleSearchChange: (value: string) => void;

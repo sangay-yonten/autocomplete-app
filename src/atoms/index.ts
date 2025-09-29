@@ -31,3 +31,9 @@ export const isDropdownOpenState = atom<boolean>({
   key: 'isDropdownOpenState',
   default: false,
 });
+
+// Atom for error message
+export const errorMessageState = atom<string | null>({
+  key: 'errorMessageState',
+  default: null,
+});

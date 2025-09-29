@@ -7,6 +7,7 @@ import {
   isLoadingState,
   isDropdownOpenState,
   autocompleteOptionsState,
+  errorMessageState,
 } from '../atoms';
 import { filteredOptionsSelector } from '../selectors';
 import { fetchUsers } from '../services/api';
@@ -38,6 +39,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
   const [isDropdownOpen, setIsDropdownOpen] = useRecoilState(isDropdownOpenState);
   const setAutocompleteOptions = useSetRecoilState(autocompleteOptionsState);
+  const setErrorMessage = useSetRecoilState(errorMessageState);
+  const errorMessage = useRecoilValue(errorMessageState);
   const filteredOptions = useRecoilValue(filteredOptionsSelector);
 
   // Debounced API fetch function
@@ -47,9 +50,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       try {
         const data = await fetchUsers(query.trim(), signal);
         setAutocompleteOptions(data);
+        setErrorMessage(null); // Clear error on success
       } catch (error) {
         console.error('Failed to fetch data:', error);
         setAutocompleteOptions([]);
+        setErrorMessage('Failed to load users. Please try again.');
+        setIsDropdownOpen(false); // Close dropdown on error
       } finally {
         setIsLoading(false);
       }
@@ -64,8 +70,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const handleSearchChange = useCallback((value: string) => {
     setSearchInput(value);
     setIsDropdownOpen(value.length > 0);
+    setErrorMessage(null); // Clear error on new input
     debouncedFetch(value);
-  }, [setSearchInput, setIsDropdownOpen, debouncedFetch]);
+  }, [setSearchInput, setIsDropdownOpen, setErrorMessage, debouncedFetch]);
 
   // Handle selecting an item
   const handleSelectItem = useCallback((item: Item) => {
@@ -103,6 +110,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     isLoading,
     isDropdownOpen,
     filteredOptions,
+    errorMessage,
 
     // Actions
     handleSearchChange,
