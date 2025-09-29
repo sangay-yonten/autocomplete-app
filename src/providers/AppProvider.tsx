@@ -41,11 +41,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const filteredOptions = useRecoilValue(filteredOptionsSelector);
 
   // Debounced API fetch function
-  const debouncedFetch = useDebounce(async (query: string) => {
+  const [debouncedFetch] = useDebounce(async (query: string, signal: AbortSignal) => {
     if (query.trim().length > 2) {
       setIsLoading(true);
       try {
-        const data = await fetchUsers(query.trim());
+        const data = await fetchUsers(query.trim(), signal);
         setAutocompleteOptions(data);
       } catch (error) {
         console.error('Failed to fetch data:', error);

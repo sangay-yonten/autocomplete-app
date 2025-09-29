@@ -36,11 +36,12 @@ export const fetchTodos = async (query?: string): Promise<Item[]> => {
 /**
  * Fetch users from JSONPlaceholder API (alternative data source)
  * @param query - Optional search query to filter results
+ * @param signal - Optional AbortSignal to cancel the request
  * @returns Promise with array of items formatted from users
  */
-export const fetchUsers = async (query?: string): Promise<Item[]> => {
+export const fetchUsers = async (query?: string, signal?: AbortSignal): Promise<Item[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users`);
+    const response = await fetch(`${API_BASE_URL}/users`, { signal });
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
