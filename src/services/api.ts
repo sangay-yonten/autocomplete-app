@@ -51,7 +51,8 @@ export const fetchUsers = async (): Promise<Item[]> => {
     return data.map((user: any) => ({
       id: user.id,
       title: user.name,
-      completed: false
+      completed: false,
+      email: user.email
     }));
   } catch (error) {
     console.error('Error fetching users:', error);

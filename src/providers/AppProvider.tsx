@@ -10,23 +10,7 @@ import {
 } from '../atoms';
 import { filteredOptionsSelector } from '../selectors';
 import { fetchUsers } from '../services/api';
-import { Item, SelectedItem } from '../types';
-
-interface AutocompleteContextType {
-  // State
-  searchInput: string;
-  selectedItems: SelectedItem[];
-  isLoading: boolean;
-  isDropdownOpen: boolean;
-  filteredOptions: Item[];
-
-  // Actions
-  handleSearchChange: (value: string) => void;
-  handleSelectItem: (item: Item) => void;
-  handleRemoveItem: (itemId: number) => void;
-  handleInputFocus: () => void;
-  handleInputBlur: () => void;
-}
+import { AutocompleteContextType, Item, SelectedItem } from '../types';
 
 const AutocompleteContext = createContext<AutocompleteContextType | undefined>(undefined);
 
