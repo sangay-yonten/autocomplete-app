@@ -1,5 +1,5 @@
 // Main provider component that wraps the application
-import React, { ReactNode, createContext, useContext, useCallback, useEffect } from 'react';
+import React, { ReactNode, createContext, useContext, useCallback } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   searchInputState,
@@ -10,6 +10,7 @@ import {
 } from '../atoms';
 import { filteredOptionsSelector } from '../selectors';
 import { fetchUsers } from '../services/api';
+import { useDebounce } from '../utils/debounce';
 import { AutocompleteContextType, Item, SelectedItem } from '../types';
 
 const AutocompleteContext = createContext<AutocompleteContextType | undefined>(undefined);
@@ -39,28 +40,32 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const setAutocompleteOptions = useSetRecoilState(autocompleteOptionsState);
   const filteredOptions = useRecoilValue(filteredOptionsSelector);
 
-  // Fetch initial data on component mount
-  useEffect(() => {
-    const loadInitialData = async () => {
+  // Debounced API fetch function
+  const debouncedFetch = useDebounce(async (query: string) => {
+    if (query.trim().length > 2) {
       setIsLoading(true);
       try {
-        const data = await fetchUsers();
+        const data = await fetchUsers(query.trim());
         setAutocompleteOptions(data);
       } catch (error) {
         console.error('Failed to fetch data:', error);
+        setAutocompleteOptions([]);
       } finally {
         setIsLoading(false);
       }
-    };
+    } else {
+      setAutocompleteOptions([]);
+    }
+  }, 500);
 
-    loadInitialData();
-  }, [setIsLoading, setAutocompleteOptions]);
+  // Fetch initial data on component mount - REMOVED to trigger on input
 
   // Handle search input change
   const handleSearchChange = useCallback((value: string) => {
     setSearchInput(value);
     setIsDropdownOpen(value.length > 0);
-  }, [setSearchInput, setIsDropdownOpen]);
+    debouncedFetch(value);
+  }, [setSearchInput, setIsDropdownOpen, debouncedFetch]);
 
   // Handle selecting an item
   const handleSelectItem = useCallback((item: Item) => {
