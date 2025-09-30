@@ -7,6 +7,11 @@
   margin: 0 auto 2rem auto;
 }
 
+.autocomplete-error {
+  color: #c33;
+  font-size: 14px;
+}
+
 .autocomplete-input {
   width: 100%;
   padding: 12px 16px;

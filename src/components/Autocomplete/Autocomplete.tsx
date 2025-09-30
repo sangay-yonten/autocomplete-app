@@ -10,6 +10,7 @@ const Autocomplete: React.FC = () => {
     isLoading,
     isDropdownOpen,
     filteredOptions,
+    errorMessage,
     handleSearchChange,
     handleSelectItem,
     handleInputFocus,
@@ -26,35 +27,43 @@ const Autocomplete: React.FC = () => {
   }, [handleSelectItem]);
 
   return (
-    <div className="autocomplete-container">
-      <input
-        type="text"
-        className="autocomplete-input"
-        placeholder={isLoading ? "Loading..." : "Search for users..."}
-        value={searchInput}
-        onChange={handleInputChange}
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-        disabled={isLoading}
-      />
+    <div>
+      <div className="autocomplete-container">
+        <input
+          type="text"
+          className="autocomplete-input"
+          placeholder={isLoading ? "Loading..." : "Search for users..."}
+          value={searchInput}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          disabled={isLoading}
+        />
 
-      {isDropdownOpen && (
-        <div className="autocomplete-dropdown">
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map((option) => (
-              <div
-                key={option.id}
-                className="autocomplete-option"
-                onClick={() => handleOptionClick(option)}
-              >
-                {option.title}
+        {isDropdownOpen && (
+          <div className="autocomplete-dropdown">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <div
+                  key={option.id}
+                  className="autocomplete-option"
+                  onClick={() => handleOptionClick(option)}
+                >
+                  {option.title}
+                </div>
+              ))
+            ) : searchInput.trim() ? (
+              <div className="autocomplete-option no-results">
+                No users found
               </div>
-            ))
-          ) : searchInput.trim() ? (
-            <div className="autocomplete-option no-results">
-              No users found
-            </div>
-          ) : null}
+            ) : null}
+          </div>
+        )}
+      </div>
+
+      {errorMessage && (
+        <div className="autocomplete-error">
+          {errorMessage}
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@ import { useAutocompleteContext } from '../../providers/AppProvider';
 import './SelectedList.css';
 
 const SelectedList: React.FC = () => {
-  const { selectedItems, handleRemoveItem } = useAutocompleteContext();
+  const { selectedItems, handleRemoveItem, handleReEditItem } = useAutocompleteContext();
 
   const handleDeleteItem = (itemId: number) => {
     handleRemoveItem(itemId);
@@ -20,7 +20,12 @@ const SelectedList: React.FC = () => {
         <ul className="selected-items">
           {selectedItems.map((item) => (
             <li key={item.id} className="selected-item">
-              <span className="item-title">{item.title}</span>
+              <span
+                className="item-title"
+                onClick={() => handleReEditItem(item)}
+              >
+                {item.title}
+              </span>
 
               <div className="item-actions">
                 <button

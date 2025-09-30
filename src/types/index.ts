@@ -10,3 +10,21 @@ export interface Item {
 export interface SelectedItem extends Item {
   selectedAt: Date;
 }
+
+export interface AutocompleteContextType {
+  // State
+  searchInput: string;
+  selectedItems: SelectedItem[];
+  isLoading: boolean;
+  isDropdownOpen: boolean;
+  filteredOptions: Item[];
+  errorMessage: string | null;
+
+  // Actions
+  handleSearchChange: (value: string) => void;
+  handleSelectItem: (item: Item) => void;
+  handleRemoveItem: (itemId: number) => void;
+  handleReEditItem: (item: SelectedItem) => void;
+  handleInputFocus: () => void;
+  handleInputBlur: () => void;
+}

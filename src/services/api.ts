@@ -35,11 +35,13 @@ export const fetchTodos = async (query?: string): Promise<Item[]> => {
 
 /**
  * Fetch users from JSONPlaceholder API (alternative data source)
+ * @param query - Optional search query to filter results
+ * @param signal - Optional AbortSignal to cancel the request
  * @returns Promise with array of items formatted from users
  */
-export const fetchUsers = async (): Promise<Item[]> => {
+export const fetchUsers = async (query?: string, signal?: AbortSignal): Promise<Item[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users`);
+    const response = await fetch(`${API_BASE_URL}/users`, { signal });
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -48,11 +50,22 @@ export const fetchUsers = async (): Promise<Item[]> => {
     const data = await response.json();
     
     // Transform users to match Item interface
-    return data.map((user: any) => ({
+    let users: Item[] = data.map((user: any) => ({
       id: user.id,
       title: user.name,
-      completed: false
+      completed: false,
+      email: user.email
     }));
+
+    // If query is provided, filter the results
+    if (query && query.trim()) {
+      users = users.filter(user =>
+        user.title.toLowerCase().includes(query.toLowerCase()) ||
+        (user.email && user.email.toLowerCase().includes(query.toLowerCase()))
+      );
+    }
+    
+    return users;
   } catch (error) {
     console.error('Error fetching users:', error);
     throw error;
